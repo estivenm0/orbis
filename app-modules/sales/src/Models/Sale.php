@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace Estivenm0\Sales\Models;
 
+use App\Models\User;
+use Estivenm0\Inventories\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

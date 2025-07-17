@@ -2,6 +2,7 @@
 
 return [
     'resource' => [
+        'inventory' => 'Inventory',
         'categories' => 'Categories',
         'suppliers' => 'Suppliers',
         'products' => 'Products',

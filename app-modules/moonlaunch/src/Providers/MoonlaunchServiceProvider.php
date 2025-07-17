@@ -21,8 +21,8 @@ class MoonlaunchServiceProvider extends ServiceProvider
         Launch $launch
     ): void {
 
-        $core->resources($launch->getResources());
-
         (new ThemeApplier($colorManager))->theme1();
+
+        $core->resources($launch->getResources());
     }
 }

@@ -20,7 +20,6 @@ class InventoriesServiceProvider extends ServiceProvider
         ColorManagerContract $colorManager,
         InventoryModule $inventories): void
     {
-        (new ThemeApplier($colorManager))->theme1();
 
         $core->resources($inventories->getResources());
     }

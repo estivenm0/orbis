@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources;
+namespace Estivenm0\Sales\MoonShine\Resources;
 
-use App\Models\Sale;
+use Estivenm0\Inventories\MoonShine\Resources\ProductResource;
+use Estivenm0\Moonlaunch\Traits\Properties;
+use Estivenm0\Sales\Models\Sale;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Enums\Action;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
@@ -23,11 +25,15 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
  */
 class SaleResource extends ModelResource
 {
-    use WithRolePermissions;
+    use Properties, WithRolePermissions;
 
     protected string $model = Sale::class;
 
-    protected string $title = 'Ventas';
+    public function __construct()
+    {
+        $this->title(__('sales::ui.resource.sales'))
+            ->itemsPerPage(20);
+    }
 
     protected function activeActions(): ListOf
     {
@@ -42,14 +48,18 @@ class SaleResource extends ModelResource
     {
         return [
             ID::make()->sortable(),
-            BelongsToMany::make('Productos', 'products', ProductResource::class)
-                ->onlyCount(),
-            Number::make('Total', 'total_amount')
+
+            BelongsToMany::make('products', resource: ProductResource::class)
+                ->translatable('sales::ui.label')
+                ->onlyCount()
                 ->sortable(),
 
-            Date::make('Fecha Venta', 'created_at')
+            Number::make('total_amount')->translatable('sales::ui.label')
+                ->sortable(),
+
+            Date::make('created_at')->translatable('sales::ui.label')
+                ->format('d/m/Y')
                 ->sortable()
-                ->format('d/m/Y'),
         ];
     }
 
@@ -59,14 +69,15 @@ class SaleResource extends ModelResource
     protected function detailFields(): iterable
     {
         return [
-            Date::make('Fecha Venta', 'created_at')
+            Date::make('created_at')->translatable('sales::ui.label')
                 ->format('d/m/Y'),
 
-            Number::make('Total', 'total_amount'),
+            Number::make('total_amount')->translatable('sales::ui.label'),
 
-            BelongsToMany::make('Productos', 'products', ProductResource::class)
+            BelongsToMany::make('products', resource: ProductResource::class)
+                ->translatable('sales::ui.label')
                 ->fields([
-                    Text::make('Cantidad', 'quantity'),
+                    Text::make('quantity')->translatable('sales::ui.label'),
                 ]),
         ];
     }

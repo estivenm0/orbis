@@ -12,6 +12,7 @@
         "php": "^8.2",
         "estivenm0/inventories": "*",
         "estivenm0/moonlaunch": "^1.0",
+        "estivenm0/sales": "*",
         "internachi/modular": "^2.3",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",

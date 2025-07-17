@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources;
+namespace Estivenm0\Sales\MoonShine\Resources;
 
 use App\Models\Customer;
 use App\Models\User;

@@ -25,14 +25,9 @@ class MoonShineServiceProvider extends ServiceProvider
     ): void {
         // $config->authEnable();
 
-        $core
-            ->resources([
-                SaleResource::class,
-                CustomerResource::class,
-            ])
+        $core->resources([])
             ->pages([
                 ...$config->getPages(),
-                POS::class,
             ]);
     }
 }

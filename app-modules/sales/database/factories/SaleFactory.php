@@ -1,9 +1,9 @@
 <?php
 
-namespace Database\Factories;
+namespace Estivenm0\Sales\Database\Factories;
 
-use App\Models\Sale;
 use App\Models\User;
+use Estivenm0\Sales\Models\Sale;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SaleFactory extends Factory

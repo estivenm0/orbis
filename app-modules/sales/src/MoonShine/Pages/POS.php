@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Pages;
+namespace Estivenm0\Sales\MoonShine\Pages;
 
-use App\Models\Product;
-use App\Models\Sale;
-use App\MoonShine\Resources\ProductResource;
+use Estivenm0\Inventories\Models\Product;
+use Estivenm0\Inventories\MoonShine\Resources\ProductResource;
+use Estivenm0\Sales\Models\Sale;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Laravel\Components\Fragment;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Http\Responses\MoonShineJsonResponse;
 use MoonShine\Laravel\MoonShineRequest;
 use MoonShine\Laravel\Pages\Page;
+use MoonShine\MenuManager\Attributes\CanSee;
 use MoonShine\Support\AlpineJs;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\Support\Enums\JsEvent;
@@ -31,7 +32,7 @@ use MoonShine\UI\Fields\Text;
 #[Icon('s.arrow-down-on-square')]
 class POS extends Page
 {
-    protected ?string $alias = 'POS';
+    protected ?string $alias = 'pos';
 
     /**
      * @return array<string, string>
@@ -48,11 +49,9 @@ class POS extends Page
         parent::prepareBeforeRender();
         $user = moonshineRequest()->user();
 
-        if (! $user->can('SaleResource.create')) {
-            abort(403);
-        }
-
+        if (! $user->can('SaleResource.create')) abort(403);
     }
+
 
     public function getTitle(): string
     {
@@ -71,7 +70,7 @@ class POS extends Page
 
     public function total()
     {
-        return array_reduce($this->getProducts(), fn ($total, $p) => $total + ($p['price'] * $p['quantity']), 0);
+        return array_reduce($this->getProducts(), fn($total, $p) => $total + ($p['price'] * $p['quantity']), 0);
     }
 
     private function events(): array
@@ -86,23 +85,24 @@ class POS extends Page
     {
         return FormBuilder::make()
             ->asyncMethod('addProduct')
-            ->submit('Agregar Producto')
+            ->submit(__('sales::ui.label.add-product'))
             ->name('form_sale')
             ->fields([
                 Grid::make([
                     Column::make([
                         Number::make('code')
+                            ->translatable('sales::ui.label')
                             ->customAttributes(['autofocus' => 'true']),
 
                     ], 4),
                     Column::make([
-                        Number::make('Cantidad', 'quantity')
-                            ->default(1)
-                            ->min(1)
-                            ->buttons(),
+                        Number::make('quantity')
+                            ->translatable('sales::ui.label')
+                            ->default(1)->min(1)->buttons(),
                     ], 4),
                     Column::make([
-                        BelongsTo::make('producto', resource: ProductResource::class)
+                        BelongsTo::make('product', resource: ProductResource::class)
+                            ->translatable('sales::ui.label')
                             ->customAttributes(['name' => 'productId'])
                             ->asyncSearch('name'),
                     ], 4),
@@ -115,18 +115,21 @@ class POS extends Page
         $r->validate(['quantity' => 'required|int|min:1']);
 
         if (empty($r->code) && empty($r->productId)) {
-            return MoonShineJsonResponse::make()->toast('Ingrese Producto', ToastType::ERROR);
+            return MoonShineJsonResponse::make()
+                ->toast(__('sales::ui.toast.enter-product'), ToastType::ERROR);
         }
 
-        $product = Product::when($r->productId, fn ($q) => $q->where('id', $r->productId))
-            ->when($r->code, fn ($q) => $q->whereCode($r->code))->first();
+        $product = Product::when($r->productId, fn($q) => $q->where('id', $r->productId))
+            ->when($r->code, fn($q) => $q->whereCode($r->code))->first();
 
         if (empty($product)) {
-            return MoonShineJsonResponse::make()->toast('Producto No Encontrado', ToastType::ERROR);
+            return MoonShineJsonResponse::make()
+                ->toast(__('sales::ui.toast.product-not-found'), ToastType::ERROR);
         }
 
         if ($product->stock < $r->quantity) {
-            return MoonShineJsonResponse::make()->toast('Stock Insuficiente', ToastType::ERROR);
+            return MoonShineJsonResponse::make()
+            ->toast(__('sales::ui.toast.insufficient-stock'), ToastType::ERROR);
         }
 
         $products = $this->getProducts();
@@ -151,7 +154,7 @@ class POS extends Page
                 ...$this->events(),
                 AlpineJs::event(JsEvent::FORM_RESET, 'form_sale'),
             ])
-            ->toast('Producto Agregado', ToastType::INFO);
+            ->toast(__('sales::ui.toast.added-product'), ToastType::INFO);
     }
 
     private function table()
@@ -160,21 +163,18 @@ class POS extends Page
             ->name('table_sale')
             ->items(array_values($this->getProducts()))
             ->fields([
-                Text::make('Código', 'code'),
-                Text::make('Nombre', 'name'),
-                Text::make('Precio', 'price'),
-                Text::make('Cantidad', 'quantity'),
-                Text::make('total', 'total'),
+                Text::make('code')->translatable('sales::ui.label'),
+                Text::make('name')->translatable('sales::ui.label'),
+                Text::make('price')->translatable('sales::ui.label'),
+                Text::make('quantity')->translatable('sales::ui.label'),
+                Text::make('total')->translatable('sales::ui.label'),
             ])
             ->async()
             ->buttons([
                 ActionButton::make('')
                     ->icon('s.x-mark')
                     ->error()
-                    ->method(
-                        'removeProduct',
-                        fn ($item) => $item,
-                    ),
+                    ->method('removeProduct', fn($item) => $item),
             ]);
     }
 
@@ -188,7 +188,7 @@ class POS extends Page
 
         return MoonShineJsonResponse::make()
             ->events($this->events())
-            ->toast('Producto Eliminado', ToastType::INFO);
+            ->toast(__('sales::ui.toast.removed-product'), ToastType::INFO);
     }
 
     public function cancelSale()
@@ -197,7 +197,7 @@ class POS extends Page
 
         return MoonShineJsonResponse::make()
             ->events($this->events())
-            ->toast('Venta Cancelada', ToastType::INFO);
+            ->toast(__('sales::ui.toast.cancelled-sale'), ToastType::INFO);
     }
 
     public function finishSale()
@@ -206,7 +206,7 @@ class POS extends Page
 
         if (empty($products)) {
             return MoonShineJsonResponse::make()
-                ->toast('Venta Sin Productos', ToastType::ERROR);
+                ->toast(__('sales::ui.toast.empty-sale'), ToastType::ERROR);
         }
 
         $sale = Sale::create([
@@ -221,7 +221,7 @@ class POS extends Page
 
         return MoonShineJsonResponse::make()
             ->events($this->events())
-            ->toast('Venta Finalizada', ToastType::SUCCESS);
+            ->toast(__('sales::ui.toast.completed-sale'), ToastType::SUCCESS);
     }
 
     /**
@@ -231,24 +231,26 @@ class POS extends Page
     {
         return [
             Flex::make([
-                ActionButton::make('Finalizar Venta')
+                ActionButton::make(__('sales::ui.label.finish-sale'))
                     ->method('finishSale')
                     ->withConfirm()
                     ->primary(),
 
-                ActionButton::make('Cancelar Venta')
+                ActionButton::make(__('sales::ui.label.cancel-sale'))
                     ->method('cancelSale')
                     ->withConfirm()
                     ->error(),
             ])->justifyAlign('between'),
 
+            Divider::make(),
+
             $this->form(),
 
-            Divider::make(),
+            Divider::make(__('sales::ui.label.products')),
 
             Fragment::make([
                 Alert::make('s.currency-dollar', 'primary')
-                    ->content(fn () => $this->total()),
+                    ->content(fn() => $this->total()),
             ])->name('alert'),
 
             $this->table(),

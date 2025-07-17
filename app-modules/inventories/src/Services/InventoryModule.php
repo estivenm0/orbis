@@ -25,7 +25,7 @@ class InventoryModule
     public function getMenu(): array
     {
         return MenuRBAC::menu(
-            MenuGroup::make('Inventario', [
+            MenuGroup::make('inventory', [
                 MenuItem::make('categories', CategoryResource::class)
                     ->translatable('inventories::ui.resource'),
 
@@ -34,7 +34,7 @@ class InventoryModule
 
                 MenuItem::make('products', ProductResource::class)
                     ->translatable('inventories::ui.resource'),
-            ], 's.archive-box'),
+            ], 's.archive-box')->translatable('inventories::ui.resource'),
 
         );
     }

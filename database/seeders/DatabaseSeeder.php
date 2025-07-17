@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use Estivenm0\Inventories\Database\Seeders\DatabaseSeeder as InventoriesSeeder;
+use Estivenm0\Sales\Models\SaleProduct;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -17,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             InventoriesSeeder::class
         ]);
+
     }
 }

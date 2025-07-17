@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4efe0246da15b487065a3395d5faff35",
+    "content-hash": "f6fbe98c8ab87674395628c46d7b7676",
     "packages": [
         {
             "name": "brick/math",
@@ -1208,6 +1208,38 @@
                 "MIT"
             ],
             "description": "Starter kit for moonshine",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "estivenm0/sales",
+            "version": "1.0",
+            "dist": {
+                "type": "path",
+                "url": "app-modules/sales",
+                "reference": "df1e267e1ef2e432ff39a02e22a33d3c816a881e"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Estivenm0\\Sales\\Providers\\SalesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Estivenm0\\Sales\\": "src/",
+                    "Estivenm0\\Sales\\Tests\\": "tests/",
+                    "Estivenm0\\Sales\\Database\\Factories\\": "database/factories/",
+                    "Estivenm0\\Sales\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
             "transport-options": {
                 "symlink": true,
                 "relative": true

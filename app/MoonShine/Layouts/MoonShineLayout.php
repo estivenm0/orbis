@@ -9,6 +9,7 @@ use App\MoonShine\Resources\CustomerResource;
 use App\MoonShine\Resources\SaleResource;
 use Estivenm0\Inventories\Services\InventoryModule;
 use Estivenm0\Moonlaunch\Services\Launch;
+use Estivenm0\Sales\Services\SaleModule;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -52,18 +53,8 @@ final class MoonShineLayout extends AppLayout
         return [
             ...app(Launch::class)->getMenu(),
             ...app(InventoryModule::class)->getMenu(),
+            ...app(SaleModule::class)->getMenu(),
         ];
-        // MenuRBAC::menu(
-        //     MenuGroup::make('Caja', [
-        //         MenuItem::make('POS', POS::class),
-        //         MenuItem::make('Ventas', SaleResource::class),
-        //     ], 's.computer-desktop'),
-
-        //     MenuGroup::make('CRM', [
-        //         MenuItem::make('Clientes', CustomerResource::class),
-        //     ], 's.briefcase'),
-
-        // );
     }
 
     /**
