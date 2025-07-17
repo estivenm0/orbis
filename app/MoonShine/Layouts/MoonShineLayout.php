@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\MoonShine\Layouts;
 
 use App\MoonShine\Pages\POS;
-use App\MoonShine\Resources\CategoryResource;
-use App\MoonShine\Resources\ProductResource;
+use App\MoonShine\Resources\CustomerResource;
 use App\MoonShine\Resources\SaleResource;
-use App\MoonShine\Resources\SupplierResource;
+use Estivenm0\Inventories\Services\InventoryModule;
+use Estivenm0\Moonlaunch\Services\Launch;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
 use MoonShine\Laravel\Layouts\AppLayout;
@@ -18,10 +18,6 @@ use MoonShine\UI\Components\Layout\Favicon;
 use MoonShine\UI\Components\Layout\Footer;
 use MoonShine\UI\Components\Layout\Layout;
 use Sweet1s\MoonshineRBAC\Components\MenuRBAC;
-use Sweet1s\MoonshineRBAC\Resource\PermissionResource;
-use Sweet1s\MoonshineRBAC\Resource\RoleResource;
-use Sweet1s\MoonshineRBAC\Resource\UserResource;
-use App\MoonShine\Resources\CustomerResource;
 
 final class MoonShineLayout extends AppLayout
 {
@@ -46,44 +42,28 @@ final class MoonShineLayout extends AppLayout
     protected function getFooterComponent(): Footer
     {
         return Footer::make()
-            ->copyright(fn (): string => 'COMPRANAX'
-            );
+            ->copyright(
+                fn(): string => 'ORBIS'
+            )->menu($this->getFooterMenu());
     }
 
     protected function menu(): array
     {
-        return MenuRBAC::menu(
-            MenuGroup::make('system', [
-                MenuItem::make('admins_title', UserResource::class)
-                    ->translatable('moonshine::ui.resource')
-                    ->icon('s.user-group'),
+        return [
+            ...app(Launch::class)->getMenu(),
+            ...app(InventoryModule::class)->getMenu(),
+        ];
+        // MenuRBAC::menu(
+        //     MenuGroup::make('Caja', [
+        //         MenuItem::make('POS', POS::class),
+        //         MenuItem::make('Ventas', SaleResource::class),
+        //     ], 's.computer-desktop'),
 
-                MenuItem::make('role', RoleResource::class)
-                    ->translatable('moonshine::ui.resource')
-                    ->icon('s.rectangle-group'),
+        //     MenuGroup::make('CRM', [
+        //         MenuItem::make('Clientes', CustomerResource::class),
+        //     ], 's.briefcase'),
 
-                MenuItem::make('permissions', PermissionResource::class)
-                    ->translatable('moonshine-rbac::ui')
-                    ->icon('s.shield-check'),
-
-            ], 'm.cube')->translatable('moonshine::ui.resource'),
-
-            MenuGroup::make('Inventario', [
-                MenuItem::make('Categorías', CategoryResource::class),
-                MenuItem::make('Proveedores', SupplierResource::class),
-                MenuItem::make('Productos', ProductResource::class),
-            ], 's.archive-box'),
-
-            MenuGroup::make('Caja', [
-                MenuItem::make('POS', POS::class),
-                MenuItem::make('Ventas', SaleResource::class),
-            ], 's.computer-desktop'),
-
-            MenuGroup::make('CRM', [
-                MenuItem::make('Clientes', CustomerResource::class),
-            ], 's.briefcase'),
-
-        );
+        // );
     }
 
     /**

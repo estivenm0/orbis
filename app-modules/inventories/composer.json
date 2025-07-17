@@ -1,0 +1,24 @@
+{
+	"name": "estivenm0/inventories",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Estivenm0\\Inventories\\": "src/",
+			"Estivenm0\\Inventories\\Tests\\": "tests/",
+			"Estivenm0\\Inventories\\Database\\Factories\\": "database/factories/",
+			"Estivenm0\\Inventories\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Estivenm0\\Inventories\\Providers\\InventoriesServiceProvider"
+			]
+		}
+	}
+}

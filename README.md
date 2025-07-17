@@ -9,12 +9,12 @@ Así es como puedes ejecutar el proyecto localmente:
 
 1. Clona el repositorio
     ```sh
-    git clone https://github.com/estivenm0/compranax.git
+    git clone https://github.com/estivenm0/orbis.git
     ```
 
 2. Navega al directorio raíz del proyecto
     ```sh
-    cd compranax
+    cd orbis
     ```
 
 3. Copia el archivo `.env.example` a `.env`
@@ -28,22 +28,8 @@ Así es como puedes ejecutar el proyecto localmente:
     composer install
     ```
 
-5. Genera la clave de la aplicación
+5. Instala
     ```sh
-    php artisan key:generate
+    php artisan launch:install
     ```
 
-6. Ejecuta las migraciones
-    ```sh
-    php artisan migrate
-    ```
-
-7. Genera permisos y role Super Admin
-    ```sh
-    php artisan moonshine:generate-permissions
-    ```
-
-8. Crea un Usuario
-    ```sh
-    php artisan moonshine-rbac:user
-    ```
