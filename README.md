@@ -1,35 +1,32 @@
-Package | Version
---- | ---
-Laravel | v11
-MoonShine  | v3
-moonshine-roles-permissions | v3
+| Package                     | Version | Description                  |
+| --------------------------- | ------- | ---------------------------- |
+| Laravel                     | v11     | Core PHP framework           |
+| MoonShine                   | v3      | Admin panel                  |
+| moonshine-roles-permissions | v3      | Roles and permissions system |
+| internachi/modular          | v2      | Modular architecture         |
 
-## Instalación
-Así es como puedes ejecutar el proyecto localmente:
+## 🚀 Installation
 
-1. Clona el repositorio
-    ```sh
+1. Clone the repository:
+
+    ```bash
     git clone https://github.com/estivenm0/orbis.git
-    ```
-
-2. Navega al directorio raíz del proyecto
-    ```sh
     cd orbis
     ```
 
-3. Copia el archivo `.env.example` a `.env`
-    ```sh
+2. Set up the environment:
+
+    ```bash
     cp .env.example .env
-    ```
-
-
-4. Instala las dependencias
-    ```sh
     composer install
     ```
 
-5. Instala
-    ```sh
+3. Run the installer:
+    ```bash
     php artisan launch:install
     ```
 
+4. Set test data
+    ```sh
+    php artisan db:seed
+    ```
